@@ -1,2 +1,1 @@
-# golang_auth
-auth system in golang
+# auth_golang

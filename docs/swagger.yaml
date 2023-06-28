@@ -1,0 +1,129 @@
+basePath: /api
+definitions:
+  dtos.ReqUser:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - phone_number
+    type: object
+  dtos.ResUser:
+    properties:
+      creation_date:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A CRUD user service
+  title: CRUD user API
+  version: "1.0"
+paths:
+  /users:
+    post:
+      description: Create a new user in the database
+      parameters:
+      - description: Create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.ReqUser'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a new user
+      tags:
+      - user
+  /users/{userID}:
+    delete:
+      description: Delete a user in the database
+      parameters:
+      - description: Delete user
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a user
+      tags:
+      - user
+    get:
+      description: Get a user by id from the database
+      parameters:
+      - description: Get user
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.ResUser'
+      summary: get a user
+      tags:
+      - user
+    put:
+      description: Update a user in the database
+      parameters:
+      - description: Update user
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: Update user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.ReqUser'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Update a user
+      tags:
+      - user
+  /users/list:
+    get:
+      description: get all users from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dtos.ResUser'
+            type: array
+      summary: get all users
+      tags:
+      - user
+swagger: "2.0"
