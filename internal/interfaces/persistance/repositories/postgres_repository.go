@@ -26,8 +26,8 @@ func (ur UserRepository) BeginTransaction() (Transaction, error) {
 }
 
 func (ur *UserRepository) CreateUser(user *domain.User) (err error) {
-	query := "INSERT INTO users (name, email, phone_number, password) VALUES ($1, $2, $3, $4)"
-	result, err := ur.db.Exec(query, user.Name(), user.Email(), user.PhoneNumber(), user.EncriptedPassword())
+	query := "INSERT INTO users (id, name, email, phone_number, password) VALUES ($1, $2, $3, $4, $5)"
+	result, err := ur.db.Exec(query, user.Id(), user.Name(), user.Email(), user.PhoneNumber(), user.EncriptedPassword())
 
 	if err != nil {
 		return ops.Err(err)

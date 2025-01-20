@@ -8,7 +8,7 @@ services:
       - '8080:8080'
     depends_on:
       - db_postgres
-    env_file: .env
+    env_file: env
   db_postgres:
     image: postgres:latest
     restart: always
@@ -17,6 +17,10 @@ services:
     volumes:
       - ./scripts/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
-      POSTGRES_USER: myuser
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydatabase
+  
+
+
+

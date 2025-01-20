@@ -1,11 +1,12 @@
-package usecases
+package application
 
 import (
 	"testing"
 
-	"github.com/severusTI/auth_golang/internal/interfaces/persistance/repositories"
-	"github.com/severusTI/auth_golang/internal/usecases/dtos"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/severusTI/auth_golang/internal/application/dtos"
+	"github.com/severusTI/auth_golang/internal/interfaces/persistance/repositories"
 )
 
 func TestCreateUser(t *testing.T) {
@@ -13,7 +14,7 @@ func TestCreateUser(t *testing.T) {
 	repo := repositories.NewUserRepositoryMemory()
 
 	// Create a new instance of UserUC
-	uc := NewUserUC(repo)
+	uc := NewUserApplication(repo)
 
 	// Create a sample request user
 	reqUser := &dtos.ReqUser{
@@ -35,7 +36,7 @@ func TestGetUser(t *testing.T) {
 	repo := repositories.NewUserRepositoryMemory()
 
 	// Create a new instance of UserUC
-	uc := NewUserUC(repo)
+	uc := NewUserApplication(repo)
 
 	// Create a sample user ID
 	userID := repo.Users[0].Id()
@@ -59,7 +60,7 @@ func TestListUsers(t *testing.T) {
 	repo := repositories.NewUserRepositoryMemory()
 
 	// Create a new instance of UserUC
-	uc := NewUserUC(repo)
+	uc := NewUserApplication(repo)
 
 	// Call the ListUsers method
 	resUsers, err := uc.ListUsers()
@@ -83,7 +84,7 @@ func TestUpdateUser(t *testing.T) {
 	repo := repositories.NewUserRepositoryMemory()
 
 	// Create a new instance of UserUC
-	uc := NewUserUC(repo)
+	uc := NewUserApplication(repo)
 
 	// Create a sample user ID
 	userID := repo.Users[0].Id()
@@ -109,7 +110,7 @@ func TestDeleteUser(t *testing.T) {
 	repo := repositories.NewUserRepositoryMemory()
 
 	// Create a new instance of UserUC
-	uc := NewUserUC(repo)
+	uc := NewUserApplication(repo)
 
 	// Create a sample user ID
 	userID := repo.Users[0].Id()

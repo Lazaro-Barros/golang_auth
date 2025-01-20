@@ -1,15 +1,31 @@
 package envload
 
 import (
-	"log"
+	"fmt"
 
-	"github.com/joho/godotenv"
+	"github.com/joeshaw/envdecode"
 )
 
-func LoadEnv() {
-	// Carrega as variáveis de ambiente do arquivo .env
-	err := godotenv.Load("/home/whoami/Documents/github/severus/auth_golang/.env")
-	if err != nil {
-		log.Printf("Failed to load .env file: %v", err)
+var cfg Config
+
+type Config struct {
+	Environment string `env:"ENV,required"`
+	DB          struct {
+		Host     string `env:"DB_HOST,required"`
+		Port     string `env:"DB_PORT,required"`
+		User     string `env:"DB_USER,required"`
+		Password string `env:"DB_PASSWORD,required"`
+		DBName   string `env:"DB_NAME,required"`
+	}
+}
+
+// Get returns a config structure.
+func Get() Config {
+	return cfg
+}
+
+func Init() {
+	if err := envdecode.Decode(&cfg); err != nil {
+		panic(fmt.Sprintf("error to decode config: %s", err))
 	}
 }

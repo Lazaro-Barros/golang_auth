@@ -4,13 +4,21 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/severusTI/auth_golang/internal/usecases"
-	"github.com/severusTI/auth_golang/internal/usecases/dtos"
+
+	"github.com/severusTI/auth_golang/internal/application"
+	"github.com/severusTI/auth_golang/internal/application/dtos"
 	"github.com/severusTI/auth_golang/pkg/ops"
 )
 
 type UserHandlers struct {
-	userUseCases usecases.UserUC
+	userApp application.IUserApplication
+}
+
+func NewUserHandlers(userApp application.IUserApplication) (obj *UserHandlers) {
+	obj = &UserHandlers{
+		userApp: userApp,
+	}
+	return
 }
 
 // CreateUser godoc
@@ -32,7 +40,7 @@ func (uh *UserHandlers) CreateUser(c *gin.Context) {
 		return
 	}
 
-	if err = uh.userUseCases.CreateUser(&user); err != nil {
+	if err = uh.userApp.CreateUser(&user); err != nil {
 		ops.Handling(c, err)
 		return
 	}
@@ -53,7 +61,7 @@ func (uh *UserHandlers) GetUser(c *gin.Context) {
 		err    error
 		userID = c.Param("id")
 	)
-	user, err := uh.userUseCases.GetUser(&userID)
+	user, err := uh.userApp.GetUser(&userID)
 	if err != nil {
 		ops.Handling(c, err)
 		return
@@ -73,7 +81,7 @@ func (uh *UserHandlers) LisUsers(c *gin.Context) {
 	var (
 		err error
 	)
-	users, err := uh.userUseCases.ListUsers()
+	users, err := uh.userApp.ListUsers()
 	if err != nil {
 		ops.Handling(c, err)
 		return
@@ -103,7 +111,7 @@ func (uh *UserHandlers) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	if err = uh.userUseCases.UpdateUser(userID, &user); err != nil {
+	if err = uh.userApp.UpdateUser(userID, &user); err != nil {
 		ops.Handling(c, err)
 		return
 	}
@@ -125,17 +133,10 @@ func (uh *UserHandlers) DeleteUser(c *gin.Context) {
 		userID = c.Param("id")
 	)
 
-	if err = uh.userUseCases.DeleteUser(&userID); err != nil {
+	if err = uh.userApp.DeleteUser(&userID); err != nil {
 		ops.Handling(c, err)
 		return
 	}
 
 	c.JSON(http.StatusNoContent, nil)
-}
-
-func NewUserHandlers(userUseCases usecases.UserUC) (obj *UserHandlers) {
-	obj = &UserHandlers{
-		userUseCases: userUseCases,
-	}
-	return
 }

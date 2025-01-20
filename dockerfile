@@ -1,30 +1,33 @@
-# Estágio de compilação
-FROM golang:1.20-alpine AS build
+# Etapa 1: Build da aplicação
+FROM golang:1.20 AS builder
 
-# Define o diretório de trabalho
+# Definir diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copia os arquivos do código-fonte para o contêiner
-COPY . .
-
-# Instala as dependências do projeto
+# Copiar os arquivos do projeto para dentro do contêiner
+COPY go.mod go.sum ./
 RUN go mod download
 
-# # Executando testes e validando coverage
-# RUN chmod +x scripts/init_test_database.sh
-# RUN sh scripts/init_test_database.sh
+# Copiar o restante dos arquivos da aplicação
+COPY . .
 
-# Compila o código do Go
-RUN go build cmd/main.go
+# Compilar a aplicação Go
+RUN go build -o app .
 
-# # Estágio de produção
-# FROM alpine:latest
+# Etapa 2: Imagem final para execução
+FROM alpine:latest
 
-# # Define o diretório de trabalho
-# WORKDIR /app
+# Adicionar certificado SSL para comunicação HTTPS (caso necessário)
+RUN apk --no-cache add ca-certificates
 
-# # Copia o executável do estágio de compilação
-# COPY --from=build /app/main .
+# Definir diretório de trabalho dentro do contêiner
+WORKDIR /root/
 
-# Define o comando de inicialização
-CMD ["./main"]
+# Copiar o binário da aplicação da imagem builder para a imagem final
+COPY --from=builder /app/app .
+
+# Expor a porta em que a aplicação será executada
+EXPOSE 8080
+
+# Comando de entrada para execução da aplicação
+CMD ["./app"]
