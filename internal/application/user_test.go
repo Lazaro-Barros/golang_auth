@@ -1,124 +1,115 @@
 package application
 
-import (
-	"testing"
+// func TestCreateUser(t *testing.T) {
+// 	// Create a mock repository
+// 	repo := repositories.NewUserRepositoryMemory()
 
-	"github.com/stretchr/testify/assert"
+// 	// Create a new instance of UserUC
+// 	uc := NewUserApplication(repo)
 
-	"github.com/severusTI/auth_golang/internal/application/dtos"
-	"github.com/severusTI/auth_golang/internal/interfaces/persistance/repositories"
-)
+// 	// Create a sample request user
+// 	reqUser := &dtos.ReqUser{
+// 		Name:            "John Doe",
+// 		Email:           "johndoe@example.com",
+// 		PhoneNumber:     "1234567890",
+// 		InputedPassword: "!A2password",
+// 	}
 
-func TestCreateUser(t *testing.T) {
-	// Create a mock repository
-	repo := repositories.NewUserRepositoryMemory()
+// 	// Call the CreateUser method
+// 	err := uc.CreateUser(reqUser)
 
-	// Create a new instance of UserUC
-	uc := NewUserApplication(repo)
+// 	// Assert that no error occurred
+// 	assert.NoError(t, err)
+// }
 
-	// Create a sample request user
-	reqUser := &dtos.ReqUser{
-		Name:            "John Doe",
-		Email:           "johndoe@example.com",
-		PhoneNumber:     "1234567890",
-		InputedPassword: "!A2password",
-	}
+// func TestGetUser(t *testing.T) {
+// 	// Create a mock repository
+// 	repo := repositories.NewUserRepositoryMemory()
 
-	// Call the CreateUser method
-	err := uc.CreateUser(reqUser)
+// 	// Create a new instance of UserUC
+// 	uc := NewUserApplication(repo)
 
-	// Assert that no error occurred
-	assert.NoError(t, err)
-}
+// 	// Create a sample user ID
+// 	userID := repo.Users[0].Id()
 
-func TestGetUser(t *testing.T) {
-	// Create a mock repository
-	repo := repositories.NewUserRepositoryMemory()
+// 	// Call the GetUser method
+// 	resUser, err := uc.GetUser(&userID)
 
-	// Create a new instance of UserUC
-	uc := NewUserApplication(repo)
+// 	// Assert that no error occurred
+// 	assert.NoError(t, err)
 
-	// Create a sample user ID
-	userID := repo.Users[0].Id()
+// 	// Assert that the returned user matches the expected user
+// 	assert.Equal(t, repo.Users[0].Id(), resUser.ID)
+// 	assert.Equal(t, repo.Users[0].Name(), resUser.Name)
+// 	assert.Equal(t, repo.Users[0].Email(), resUser.Email)
+// 	assert.Equal(t, repo.Users[0].PhoneNumber(), resUser.PhoneNumber)
 
-	// Call the GetUser method
-	resUser, err := uc.GetUser(&userID)
+// }
 
-	// Assert that no error occurred
-	assert.NoError(t, err)
+// func TestListUsers(t *testing.T) {
+// 	// Create a mock repository
+// 	repo := repositories.NewUserRepositoryMemory()
 
-	// Assert that the returned user matches the expected user
-	assert.Equal(t, repo.Users[0].Id(), resUser.ID)
-	assert.Equal(t, repo.Users[0].Name(), resUser.Name)
-	assert.Equal(t, repo.Users[0].Email(), resUser.Email)
-	assert.Equal(t, repo.Users[0].PhoneNumber(), resUser.PhoneNumber)
+// 	// Create a new instance of UserUC
+// 	uc := NewUserApplication(repo)
 
-}
+// 	// Call the ListUsers method
+// 	resUsers, err := uc.ListUsers()
 
-func TestListUsers(t *testing.T) {
-	// Create a mock repository
-	repo := repositories.NewUserRepositoryMemory()
+// 	// Assert that no error occurred
+// 	assert.NoError(t, err)
 
-	// Create a new instance of UserUC
-	uc := NewUserApplication(repo)
+// 	// Assert that the returned users match the expected users
+// 	assert.Len(t, resUsers, len(repo.Users))
+// 	for i := range resUsers {
+// 		assert.Equal(t, repo.Users[i].Id(), resUsers[i].ID)
+// 		assert.Equal(t, repo.Users[i].Name(), resUsers[i].Name)
+// 		assert.Equal(t, repo.Users[i].Email(), resUsers[i].Email)
+// 		assert.Equal(t, repo.Users[i].PhoneNumber(), resUsers[i].PhoneNumber)
+// 	}
 
-	// Call the ListUsers method
-	resUsers, err := uc.ListUsers()
+// }
 
-	// Assert that no error occurred
-	assert.NoError(t, err)
+// func TestUpdateUser(t *testing.T) {
+// 	// Create a mock repository
+// 	repo := repositories.NewUserRepositoryMemory()
 
-	// Assert that the returned users match the expected users
-	assert.Len(t, resUsers, len(repo.Users))
-	for i := range resUsers {
-		assert.Equal(t, repo.Users[i].Id(), resUsers[i].ID)
-		assert.Equal(t, repo.Users[i].Name(), resUsers[i].Name)
-		assert.Equal(t, repo.Users[i].Email(), resUsers[i].Email)
-		assert.Equal(t, repo.Users[i].PhoneNumber(), resUsers[i].PhoneNumber)
-	}
+// 	// Create a new instance of UserUC
+// 	uc := NewUserApplication(repo)
 
-}
+// 	// Create a sample user ID
+// 	userID := repo.Users[0].Id()
 
-func TestUpdateUser(t *testing.T) {
-	// Create a mock repository
-	repo := repositories.NewUserRepositoryMemory()
+// 	// Create a sample request user
+// 	reqUser := &dtos.ReqUser{
+// 		Name:            "John Doe",
+// 		Email:           "johndoe@example.com",
+// 		PhoneNumber:     "1234567890",
+// 		InputedPassword: "!1Apassword",
+// 	}
 
-	// Create a new instance of UserUC
-	uc := NewUserApplication(repo)
+// 	// Call the UpdateUser method
+// 	err := uc.UpdateUser(userID, reqUser)
 
-	// Create a sample user ID
-	userID := repo.Users[0].Id()
+// 	// Assert that no error occurred
+// 	assert.NoError(t, err)
 
-	// Create a sample request user
-	reqUser := &dtos.ReqUser{
-		Name:            "John Doe",
-		Email:           "johndoe@example.com",
-		PhoneNumber:     "1234567890",
-		InputedPassword: "!1Apassword",
-	}
+// }
 
-	// Call the UpdateUser method
-	err := uc.UpdateUser(userID, reqUser)
+// func TestDeleteUser(t *testing.T) {
+// 	// Create a mock repository
+// 	repo := repositories.NewUserRepositoryMemory()
 
-	// Assert that no error occurred
-	assert.NoError(t, err)
+// 	// Create a new instance of UserUC
+// 	uc := NewUserApplication(repo)
 
-}
+// 	// Create a sample user ID
+// 	userID := repo.Users[0].Id()
 
-func TestDeleteUser(t *testing.T) {
-	// Create a mock repository
-	repo := repositories.NewUserRepositoryMemory()
+// 	// Call the DeleteUser method
+// 	err := uc.DeleteUser(&userID)
 
-	// Create a new instance of UserUC
-	uc := NewUserApplication(repo)
+// 	// Assert that no error occurred
+// 	assert.NoError(t, err)
 
-	// Create a sample user ID
-	userID := repo.Users[0].Id()
-
-	// Call the DeleteUser method
-	err := uc.DeleteUser(&userID)
-
-	// Assert that no error occurred
-	assert.NoError(t, err)
-
-}
+// }

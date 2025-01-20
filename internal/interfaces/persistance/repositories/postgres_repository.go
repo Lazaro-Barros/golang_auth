@@ -17,13 +17,6 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 		db: db,
 	}
 }
-func (ur UserRepository) BeginTransaction() (Transaction, error) {
-	tx, err := ur.db.Begin()
-	if err != nil {
-		return nil, ops.Err(err)
-	}
-	return tx, nil
-}
 
 func (ur *UserRepository) CreateUser(user *domain.User) (err error) {
 	query := "INSERT INTO users (id, name, email, phone_number, password) VALUES ($1, $2, $3, $4, $5)"

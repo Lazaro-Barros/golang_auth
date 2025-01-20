@@ -1,33 +1,27 @@
-# Etapa 1: Build da aplicação
-FROM golang:1.20 AS builder
+# Stage 1: Build the Go application
+FROM golang:1.20-alpine AS builder
 
-# Definir diretório de trabalho dentro do contêiner
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copiar os arquivos do projeto para dentro do contêiner
+# Copy go.mod and go.sum first for caching
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copiar o restante dos arquivos da aplicação
+# Copy the rest of the application code
 COPY . .
 
-# Compilar a aplicação Go
-RUN go build -o app .
+# Build the Go application
+RUN go build -o main .
 
-# Etapa 2: Imagem final para execução
-FROM alpine:latest
+# Stage 2: Create a minimal image
+FROM scratch
 
-# Adicionar certificado SSL para comunicação HTTPS (caso necessário)
-RUN apk --no-cache add ca-certificates
+# Copy the binary from the builder stage
+COPY --from=builder /app/main /main
 
-# Definir diretório de trabalho dentro do contêiner
-WORKDIR /root/
-
-# Copiar o binário da aplicação da imagem builder para a imagem final
-COPY --from=builder /app/app .
-
-# Expor a porta em que a aplicação será executada
+# Expose the port your application listens on (if any)
 EXPOSE 8080
 
-# Comando de entrada para execução da aplicação
-CMD ["./app"]
+# Set the entrypoint for the container
+ENTRYPOINT ["/main"]
