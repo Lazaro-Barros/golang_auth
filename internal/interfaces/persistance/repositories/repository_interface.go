@@ -1,11 +1,10 @@
 package repositories
 
-import "github.com/severusTI/auth_golang/internal/domain"
+import "github.com/severusTI/auth_golang/internal/domain/entities"
 
 type IUserRepository interface {
-	CreateUser(user *domain.User) error
-	GetUser(userID *string) (*domain.User, error)
-	ListUsers() ([]domain.User, error)
-	UpdateUser(userID *string, user *domain.User) error
+	CreateUser(user *entities.User) error
+	GetUserByEmail(email *string) (*entities.User, error)
+	UpdateUser(userID *string, user *entities.User) error
 	DeleteUser(userID *string) error
 }

@@ -14,7 +14,7 @@ type UserHandlers struct {
 	userApp application.IUserApplication
 }
 
-func NewUserHandlers(userApp application.IUserApplication) (obj *UserHandlers) {
+func NewUserHandler(userApp application.IUserApplication) (obj *UserHandlers) {
 	obj = &UserHandlers{
 		userApp: userApp,
 	}
@@ -46,48 +46,6 @@ func (uh *UserHandlers) CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{})
-}
-
-// GetUser godoc
-// @Summary get a user
-// @Description Get a user by id from the database
-// @Param userID path string true "Get user"
-// @Produce application/json
-// @Tags user
-// @Success 200 {object} dtos.ResUser{}
-// @Router /users/{userID} [GET]
-func (uh *UserHandlers) GetUser(c *gin.Context) {
-	var (
-		err    error
-		userID = c.Param("id")
-	)
-	user, err := uh.userApp.GetUser(&userID)
-	if err != nil {
-		ops.Handling(c, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, *user)
-}
-
-// ListUsers godoc
-// @Summary get all users
-// @Description get all users from the database
-// @Produce application/json
-// @Tags user
-// @Success 200 {object} []dtos.ResUser{}
-// @Router /users/list [GET]
-func (uh *UserHandlers) LisUsers(c *gin.Context) {
-	var (
-		err error
-	)
-	users, err := uh.userApp.ListUsers()
-	if err != nil {
-		ops.Handling(c, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, users)
 }
 
 // UpdateUser godoc

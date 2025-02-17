@@ -1,4 +1,4 @@
-package domain
+package entities
 
 import (
 	"testing"
@@ -45,5 +45,5 @@ func TestUserFunctions(t *testing.T) {
 	assert.NotEmpty(t, user.Id())
 	assert.Equal(t, "9999999999999", user.PhoneNumber())
 	assert.Equal(t, "mocker user 1", user.Name())
-	assert.NotEqual(t, "!@#123Mockedpassword", user.EncriptedPassword())
+	assert.NotEqual(t, "!@#123Mockedpassword", user.HashedPassword())
 }

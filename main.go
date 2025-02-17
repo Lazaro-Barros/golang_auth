@@ -5,9 +5,10 @@ import (
 
 	_ "github.com/severusTI/auth_golang/docs"
 	"github.com/severusTI/auth_golang/internal/application"
+	"github.com/severusTI/auth_golang/internal/application/service"
 	"github.com/severusTI/auth_golang/internal/interfaces/api/handlers"
 	"github.com/severusTI/auth_golang/internal/interfaces/api/routers"
-	"github.com/severusTI/auth_golang/internal/interfaces/persistance/repositories"
+	"github.com/severusTI/auth_golang/internal/interfaces/persistance/repositories/postgres"
 	"github.com/severusTI/auth_golang/pkg/database"
 	envload "github.com/severusTI/auth_golang/pkg/env_load"
 )
@@ -23,11 +24,14 @@ func main() {
 	db := database.InitDBConnection(envload.Get())
 	defer db.Close()
 
-	userRepo := repositories.NewUserRepository(db)
+	userRepo := postgres.NewUserRepository(db)
 	userusecase := application.NewUserApplication(userRepo)
-	userHandlers := handlers.NewUserHandlers(userusecase)
+	userHandler := handlers.NewUserHandler(userusecase)
 
-	r := routers.SetupUserRoutes(*userHandlers)
+	jwtService := service.NewTokenService()
+	loginHanler := handlers.NewLoginHandler(application.NewLoginApplication(userRepo, jwtService))
+
+	r := routers.SetupUserRoutes(userHandler, loginHanler)
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal("Erro ao iniciar o servidor:", err)
 	}
